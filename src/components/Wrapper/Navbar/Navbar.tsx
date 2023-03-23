@@ -5,8 +5,10 @@ import {
   Stack,
   IconButton,
   Typography,
+  Link,
 } from '@mui/material';
 import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -19,8 +21,16 @@ const Navbar = () => {
           Rick and Morty APP
         </Typography>
         <Stack direction='row' spacing={2}>
-          <Button color='inherit'>R&M World</Button>
-          <Button color='inherit'>Create Character</Button>
+          <Link to='/' component={NavLink} underline='none' color='inherit'>
+            <Button color='inherit'>R&M World</Button>
+          </Link>
+          <Link
+            to='/create-character'
+            component={NavLink}
+            underline='none'
+            color='inherit'>
+            <Button color='inherit'>Create Character</Button>
+          </Link>
         </Stack>
       </Toolbar>
     </AppBar>

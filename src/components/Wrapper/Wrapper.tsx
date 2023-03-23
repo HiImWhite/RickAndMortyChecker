@@ -1,7 +1,12 @@
 import React from 'react';
+import Navbar from './Navbar/Navbar';
 
 const Wrapper = () => {
-  return <div>Wrapper</div>;
+  return (
+    <>
+      <Navbar />
+    </>
+  );
 };
 
 export default Wrapper;

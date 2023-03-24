@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import CreateCharacter from './views/CreateCharacter';
+import RandomCharacter from './views/RandomCharacter';
 import LandingPage from './views/LandingPage';
 
 function App() {
   return (
     <Routes>
       <Route path='/' element={<LandingPage />} />
-      <Route path='/create-character' element={<CreateCharacter />} />
+      <Route path='/random-character' element={<RandomCharacter />} />
     </Routes>
   );
 }

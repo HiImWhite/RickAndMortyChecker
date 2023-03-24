@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  Grid,
   Box,
   Button,
   Card,
@@ -54,14 +55,25 @@ const RandomContent = () => {
         flexDirection: 'column',
       }}>
       {characterData.id === 0 ? (
-        <Button onClick={handleClick}>Generate Character</Button>
+        <Button
+          sx={{ margin: 5 }}
+          size='large'
+          variant='contained'
+          onClick={handleClick}>
+          Generate Character
+        </Button>
       ) : (
         <>
-          <Button onClick={handleClick}>Generate Character</Button>
-          <Card sx={{ maxWidth: 345 }}>
+          <Button
+            sx={{ margin: 5 }}
+            size='large'
+            variant='contained'
+            onClick={handleClick}>
+            Generate Character
+          </Button>
+          <Card sx={{ maxWidth: 600 }}>
             <CardMedia
               component='img'
-              height='140'
               image={characterData.image}
               alt={characterData.name}
             />

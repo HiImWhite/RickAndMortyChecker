@@ -41,13 +41,12 @@ const MainContent = () => {
 
   return (
     <Box>
-      <Grid container spacing={2}>
+      <Grid container>
         {characterData.map((character) => (
           <Grid item xs={12} sm={6} md={4} key={character.id}>
-            <Card>
+            <Card sx={{ margin: 3 }}>
               <CardMedia
                 component='img'
-                height='140'
                 image={character.image}
                 alt={character.name}
               />

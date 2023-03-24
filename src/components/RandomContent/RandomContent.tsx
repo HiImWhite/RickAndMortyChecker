@@ -56,7 +56,7 @@ const RandomContent = () => {
       }}>
       {characterData.id === 0 ? (
         <Button
-          sx={{ margin: 5 }}
+          sx={{ margin: 3 }}
           size='large'
           variant='contained'
           onClick={handleClick}>
@@ -65,7 +65,7 @@ const RandomContent = () => {
       ) : (
         <>
           <Button
-            sx={{ margin: 5 }}
+            sx={{ margin: 3 }}
             size='large'
             variant='contained'
             onClick={handleClick}>

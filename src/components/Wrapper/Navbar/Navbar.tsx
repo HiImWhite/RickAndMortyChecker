@@ -25,11 +25,11 @@ const Navbar = () => {
             <Button color='inherit'>R&M World</Button>
           </Link>
           <Link
-            to='/create-character'
+            to='/random-character'
             component={NavLink}
             underline='none'
             color='inherit'>
-            <Button color='inherit'>Create Character</Button>
+            <Button color='inherit'>Random Character</Button>
           </Link>
         </Stack>
       </Toolbar>

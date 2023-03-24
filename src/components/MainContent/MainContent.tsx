@@ -13,6 +13,7 @@ import {
 import { Character } from '../../interfaces/Character';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import IconButton from '@mui/material/IconButton';
+import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 const MainContent = () => {
   const [characterData, setCharacterData] = useState<Character[]>([]);
@@ -23,8 +24,6 @@ const MainContent = () => {
   const [species, setSpecies] = useState<string>('');
   const [gender, setGender] = useState<string>('');
   const [image, setImage] = useState(null);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const style = {
     position: 'absolute',
@@ -60,10 +59,28 @@ const MainContent = () => {
 
   console.log(characterData);
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const handleDelete = (id: number) => {
     setCharacterData((prevData) => {
       return prevData.filter((data) => data.id !== id);
     });
+  };
+
+  const [editCharacterId, setEditCharacterId] = useState(null);
+
+  const handleEdit = (id: number) => {
+    setEditCharacterId(id);
+    setOpen(true);
+    const characterToEdit = characterData.find(
+      (character) => character.id === id,
+    );
+    setName(characterToEdit.name);
+    setStatus(characterToEdit.status);
+    setSpecies(characterToEdit.species);
+    setGender(characterToEdit.gender);
+    setImage(characterToEdit.image);
   };
 
   const handleSubmit = (e) => {
@@ -107,6 +124,9 @@ const MainContent = () => {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'>
         <Box sx={style}>
+          <Typography variant='h6' component='h3' color={'black'}>
+            {name ? 'Edit character' : 'Add character'}
+          </Typography>
           <Box
             component='form'
             onSubmit={handleSubmit}
@@ -183,6 +203,9 @@ const MainContent = () => {
                 </Typography>
                 <IconButton onClick={() => handleDelete(character.id)}>
                   <DeleteForeverRoundedIcon />
+                </IconButton>
+                <IconButton onClick={() => handleEdit(character.id)}>
+                  <EditRoundedIcon />
                 </IconButton>
               </CardContent>
             </Card>

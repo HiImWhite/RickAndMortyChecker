@@ -1,46 +1,74 @@
 import { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
-import Typography from '@mui/material/Typography';
-
-interface Character {
-  id: number;
-  name: string;
-  status: string;
-  species: string;
-  gender: string;
-  image: string;
-}
+import {
+  Box,
+  Grid,
+  Card,
+  CardMedia,
+  Typography,
+  CardContent,
+} from '@mui/material';
+import { Character } from '../../interfaces/Character';
 
 const MainContent = () => {
   const [characterData, setCharacterData] = useState<Character[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const url = 'https://rickandmortyapi.com/api/character';
 
   useEffect(() => {
-    const url = 'https://rickandmortyapi.com/api/character';
-
     const fetchData = async () => {
       try {
         const response = await fetch(url);
         const data = await response.json();
         setCharacterData(data.results);
+
+        console.log(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [url]);
+
+  console.log(characterData);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box>
-      {characterData.map((character) => (
-        <div key={character.id}>
-          <h2>{character.name}</h2>
-          <p>Status: {character.status}</p>
-          <p>Species: {character.species}</p>
-          <p>Gender: {character.gender}</p>
-          <img src={character.image} alt={character.name}></img>
-        </div>
-      ))}
+      <Grid container spacing={2}>
+        {characterData.map((character) => (
+          <Grid item xs={12} sm={6} md={4} key={character.id}>
+            <Card>
+              <CardMedia
+                component='img'
+                height='140'
+                image={character.image}
+                alt={character.name}
+              />
+              <CardContent>
+                <Typography gutterBottom variant='h5' component='div'>
+                  {character.name}
+                </Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  Status: {character.status}
+                </Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  Species: {character.species}
+                </Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  Gender: {character.gender}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 };

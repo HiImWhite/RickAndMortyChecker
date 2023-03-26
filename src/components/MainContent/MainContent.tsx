@@ -7,50 +7,35 @@ import {
   Typography,
   CardContent,
   Button,
-  Modal,
-  TextField,
 } from '@mui/material';
 import { Character } from '../../interfaces/Character';
 import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
 import IconButton from '@mui/material/IconButton';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import MainModal from '../Modal/MainModal';
 
 const MainContent = () => {
   const [characterData, setCharacterData] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
-  const [status, setStatus] = useState<string>('');
-  const [species, setSpecies] = useState<string>('');
-  const [gender, setGender] = useState<string>('');
-  const [image, setImage] = useState(null);
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-  };
+  const [newCharacterData, setNewCharacterData] = useState<Character>({
+    id: 0,
+    name: '',
+    status: '',
+    species: '',
+    gender: '',
+    image: '',
+  });
 
   const url = 'https://rickandmortyapi.com/api/character';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storedData = localStorage.getItem('characterData');
-        if (storedData) {
-          setCharacterData(JSON.parse(storedData));
-        } else {
-          const response = await fetch(url);
-          const data = await response.json();
-          setCharacterData(data);
-          localStorage.setItem('characterData', JSON.stringify(data));
-        }
+        const response = await fetch(url);
+        const data = await response.json();
+        setCharacterData(data.results);
+        localStorage.setItem('characterData', JSON.stringify(data.results));
       } catch (error) {
         console.log(error);
       }
@@ -60,6 +45,27 @@ const MainContent = () => {
     fetchData();
   }, [url]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const storedData = localStorage.getItem('characterData');
+  //       if (storedData) {
+  //         setCharacterData(JSON.parse(storedData));
+  //       } else {
+  //         const response = await fetch(url);
+  //         const data = await response.json();
+  //         setCharacterData(data.results);
+  //         localStorage.setItem('characterData', JSON.stringify(data.results));
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //     setLoading(false);
+  //   };
+
+  //   fetchData();
+  // }, [url]);
+
   console.log(characterData);
 
   const handleOpen = () => setOpen(true);
@@ -67,7 +73,9 @@ const MainContent = () => {
 
   const handleDelete = (id: number) => {
     setCharacterData((prevData) => {
-      return prevData.filter((data) => data.id !== id);
+      const updatedData = prevData.filter((data) => data.id !== id);
+      localStorage.setItem('characterData', JSON.stringify(updatedData));
+      return updatedData;
     });
   };
 
@@ -86,22 +94,39 @@ const MainContent = () => {
   //   setImage(characterToEdit.image);
   // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     const newCharacter = {
       id: characterData.length + 1,
-      name,
-      status,
-      species,
-      gender,
+      name: newCharacterData.name,
+      status: newCharacterData.status,
+      species: newCharacterData.species,
+      gender: newCharacterData.gender,
       image:
-        image || 'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
+        newCharacterData.image ||
+        'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
     };
     setCharacterData([...characterData, newCharacter]);
 
-    localStorage.setItem('characterData', JSON.stringify(characterData));
+    localStorage.setItem(
+      'characterData',
+      JSON.stringify([...characterData, newCharacter]),
+    );
     handleClose();
+  };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const reader = new FileReader();
+    const files = event.target.files;
+    if (files || files.length === 0) {
+      return;
+    }
+    reader.readAsDataURL(files[0]);
+    reader.onload = () => {
+      setNewCharacterData((prevData) => ({
+        ...prevData,
+        image: reader.result as string,
+      }));
+    };
   };
 
   if (loading) {
@@ -120,70 +145,20 @@ const MainContent = () => {
         sx={{ marginTop: 3 }}
         size='large'
         variant='contained'
-        onClick={handleOpen}>
+        onClick={() => {
+          handleOpen();
+        }}>
         Add character
       </Button>
-      <Modal
+      <MainModal
         open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'>
-        <Box sx={style}>
-          <Typography variant='h6' component='h3' color={'black'}>
-            {name ? 'Edit character' : 'Add character'}
-          </Typography>
-          <Box
-            component='form'
-            onSubmit={handleSubmit}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}>
-            <TextField
-              id='image'
-              type='file'
-              margin='normal'
-              onChange={(event) => setImage(event.target.files[0])}
-            />
-            <TextField
-              id='name'
-              label='name'
-              margin='normal'
-              required
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <TextField
-              id='status'
-              label='status'
-              margin='normal'
-              required
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-            />
-            <TextField
-              id='species'
-              label='species'
-              margin='normal'
-              required
-              value={species}
-              onChange={(event) => setSpecies(event.target.value)}
-            />
-            <TextField
-              id='gender'
-              label='gender'
-              margin='normal'
-              required
-              value={gender}
-              onChange={(event) => setGender(event.target.value)}
-            />
-            <Button type='submit' variant='contained' sx={{ mt: 3 }}>
-              Submit
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        handleImageChange={handleImageChange}
+        newCharacterData={newCharacterData}
+        setNewCharacterData={setNewCharacterData}
+      />
+
       <Grid container>
         {characterData.map((character) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={character.id}>

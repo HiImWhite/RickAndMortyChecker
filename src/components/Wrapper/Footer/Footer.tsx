@@ -8,6 +8,7 @@ const Footer = () => {
         position: 'fixed',
         bottom: 0,
         width: '100%',
+        zIndex: 5,
       }}
       component='footer'
       square

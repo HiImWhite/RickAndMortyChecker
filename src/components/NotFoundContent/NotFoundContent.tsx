@@ -24,20 +24,8 @@ const NotFoundContent = () => {
             align={'center'}
             maxWidth='430px'
             mx='auto'>
-            Oops! Looks like you followed a bad link
-            <br />
-            If you think this is a problem with us, please{' '}
-            <Link
-              component={NavLink}
-              to={'/contact'}
-              underline='none'
-              sx={{
-                '&:hover': {
-                  opacity: 0.75,
-                },
-              }}>
-              tell us
-            </Link>
+            Oops! Looks like you followed a bad link.
+            <br /> Click the button to go back.
           </Typography>
           <Box marginTop={4} display={'flex'} justifyContent={'center'}>
             <Button

@@ -1,11 +1,12 @@
-import React from 'react';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
+import WrapperProps from '../../interfaces/WrapperProps';
 
-const Wrapper = () => {
+const Wrapper = ({ children }: WrapperProps) => {
   return (
     <>
       <Navbar />
+      {children}
       <Footer />
     </>
   );

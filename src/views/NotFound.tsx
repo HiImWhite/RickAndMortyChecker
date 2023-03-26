@@ -4,8 +4,9 @@ import Wrapper from '../components/Wrapper/Wrapper';
 const NotFound = () => {
   return (
     <>
-      <Wrapper />
-      <NotFoundContent />
+      <Wrapper>
+        <NotFoundContent />
+      </Wrapper>
     </>
   );
 };

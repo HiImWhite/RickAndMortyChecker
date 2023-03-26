@@ -1,5 +1,6 @@
 export default interface AddCharacterModal {
   open: boolean;
+  isEditMode: boolean;
   handleClose: () => void;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -8,7 +9,7 @@ export default interface AddCharacterModal {
     status: string;
     species: string;
     gender: string;
-    image: string | null;
+    image: string;
   };
   setNewCharacterData: React.Dispatch<
     React.SetStateAction<{
@@ -17,7 +18,7 @@ export default interface AddCharacterModal {
       status: string;
       species: string;
       gender: string;
-      image: string | null;
+      image: string;
     }>
   >;
 }

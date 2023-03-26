@@ -73,9 +73,9 @@ const RandomContent = () => {
           </Button>
           <Card
             sx={{
-              width: '75%',
+              width: '65%',
               ['@media (min-width:600px)']: {
-                width: '50%',
+                width: '45%',
               },
               ['@media (min-width:960px)']: {
                 width: '25%',

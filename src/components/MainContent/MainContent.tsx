@@ -18,6 +18,7 @@ const MainContent = () => {
   const [characterData, setCharacterData] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [newCharacterData, setNewCharacterData] = useState<Character>({
     id: 0,
     name: '',
@@ -26,16 +27,22 @@ const MainContent = () => {
     gender: '',
     image: '',
   });
+  const [editingCharacterId, setEditingCharacterId] = useState<number>(0);
 
   const url = 'https://rickandmortyapi.com/api/character';
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(url);
-        const data = await response.json();
-        setCharacterData(data.results);
-        localStorage.setItem('characterData', JSON.stringify(data.results));
+        const storedData = localStorage.getItem('characterData');
+        if (storedData) {
+          setCharacterData(JSON.parse(storedData));
+        } else {
+          const response = await fetch(url);
+          const data = await response.json();
+          setCharacterData(data.results);
+          localStorage.setItem('characterData', JSON.stringify(data.results));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -45,31 +52,21 @@ const MainContent = () => {
     fetchData();
   }, [url]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const storedData = localStorage.getItem('characterData');
-  //       if (storedData) {
-  //         setCharacterData(JSON.parse(storedData));
-  //       } else {
-  //         const response = await fetch(url);
-  //         const data = await response.json();
-  //         setCharacterData(data.results);
-  //         localStorage.setItem('characterData', JSON.stringify(data.results));
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //     setLoading(false);
-  //   };
-
-  //   fetchData();
-  // }, [url]);
-
   console.log(characterData);
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setEditingCharacterId(0);
+    setNewCharacterData({
+      id: 0,
+      name: '',
+      status: '',
+      species: '',
+      gender: '',
+      image: '',
+    });
+  };
 
   const handleDelete = (id: number) => {
     setCharacterData((prevData) => {
@@ -79,24 +76,17 @@ const MainContent = () => {
     });
   };
 
-  // const [editCharacterId, setEditCharacterId] = useState(null);
-
-  // const handleEdit = (id: number) => {
-  //   setEditCharacterId(id);
-  //   setOpen(true);
-  //   const characterToEdit = characterData.find(
-  //     (character) => character.id === id,
-  //   );
-  //   setName(characterToEdit.name);
-  //   setStatus(characterToEdit.status);
-  //   setSpecies(characterToEdit.species);
-  //   setGender(characterToEdit.gender);
-  //   setImage(characterToEdit.image);
-  // };
+  const handleEdit = (id: number) => {
+    const character = characterData.find((c) => c.id === id);
+    setNewCharacterData(character as Character);
+    setEditingCharacterId(id);
+    setIsEditMode(true);
+    handleOpen();
+  };
 
   const handleSubmit = () => {
     const newCharacter = {
-      id: characterData.length + 1,
+      id: editingCharacterId || characterData.length + 1,
       name: newCharacterData.name,
       status: newCharacterData.status,
       species: newCharacterData.species,
@@ -105,19 +95,33 @@ const MainContent = () => {
         newCharacterData.image ||
         'https://rickandmortyapi.com/api/character/avatar/19.jpeg',
     };
-    setCharacterData([...characterData, newCharacter]);
 
-    localStorage.setItem(
-      'characterData',
-      JSON.stringify([...characterData, newCharacter]),
-    );
+    if (editingCharacterId) {
+      setCharacterData((prevData) => {
+        const updatedData = prevData.map((data) => {
+          if (data.id === editingCharacterId) {
+            return newCharacter;
+          }
+          return data;
+        });
+        localStorage.setItem('characterData', JSON.stringify(updatedData));
+        return updatedData;
+      });
+    } else {
+      setCharacterData([...characterData, newCharacter]);
+
+      localStorage.setItem(
+        'characterData',
+        JSON.stringify([...characterData, newCharacter]),
+      );
+    }
     handleClose();
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
     const files = event.target.files;
-    if (files || files.length === 0) {
+    if (!files || files.length === 0) {
       return;
     }
     reader.readAsDataURL(files[0]);
@@ -157,14 +161,16 @@ const MainContent = () => {
         handleImageChange={handleImageChange}
         newCharacterData={newCharacterData}
         setNewCharacterData={setNewCharacterData}
+        isEditMode={isEditMode}
       />
 
       <Grid container>
         {characterData.map((character) => (
-          <Grid item xs={12} sm={6} md={4} xl={3} key={character.id}>
+          <Grid item xs={12} sm={6} md={4} xl={3} key={character.id} mb={5}>
             <Card sx={{ margin: 3 }}>
               <CardMedia
                 component='img'
+                sx={{ maxHeight: 555 }}
                 image={character.image}
                 alt={character.name}
               />
@@ -181,12 +187,17 @@ const MainContent = () => {
                 <Typography variant='body2' color='text.secondary'>
                   Gender: {character.gender}
                 </Typography>
-                <IconButton onClick={() => handleDelete(character.id)}>
-                  <DeleteForeverRoundedIcon />
-                </IconButton>
-                {/* <IconButton onClick={() => handleEdit(character.id)}>
-                  <EditRoundedIcon />
-                </IconButton> */}
+                <Box
+                  display='flex'
+                  alignItems='flex-end'
+                  justifyContent='flex-end'>
+                  <IconButton onClick={() => handleDelete(character.id)}>
+                    <DeleteForeverRoundedIcon />
+                  </IconButton>
+                  <IconButton onClick={() => handleEdit(character.id)}>
+                    <EditRoundedIcon />
+                  </IconButton>
+                </Box>
               </CardContent>
             </Card>
           </Grid>

@@ -8,6 +8,7 @@ const MainModal: React.FC<AddCharacterModal> = ({
   handleImageChange,
   newCharacterData,
   setNewCharacterData,
+  isEditMode,
 }) => {
   const style = {
     position: 'absolute' as const,
@@ -20,6 +21,8 @@ const MainModal: React.FC<AddCharacterModal> = ({
     p: 4,
   };
 
+  const title = isEditMode ? 'Edit character' : 'Add character';
+
   return (
     <Modal
       open={open}
@@ -27,9 +30,11 @@ const MainModal: React.FC<AddCharacterModal> = ({
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'>
       <Box sx={style}>
-        <Typography variant='h6' component='h3' color={'black'}>
-          Add character
-        </Typography>
+        <Box display='flex' alignItems='center' justifyContent='center'>
+          <Typography variant='h6' component='h3' color={'black'}>
+            {title}
+          </Typography>
+        </Box>
         <Box
           component='form'
           onSubmit={handleSubmit}

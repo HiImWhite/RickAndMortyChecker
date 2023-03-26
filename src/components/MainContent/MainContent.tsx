@@ -52,8 +52,6 @@ const MainContent = () => {
     fetchData();
   }, [url]);
 
-  console.log(characterData);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -134,7 +132,17 @@ const MainContent = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+        }}>
+        Loading...
+      </Box>
+    );
   }
 
   return (
@@ -163,16 +171,15 @@ const MainContent = () => {
         setNewCharacterData={setNewCharacterData}
         isEditMode={isEditMode}
       />
-
       <Grid container>
         {characterData.map((character) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={character.id} mb={5}>
             <Card sx={{ margin: 3 }}>
               <CardMedia
                 component='img'
-                sx={{ maxHeight: 555 }}
                 image={character.image}
                 alt={character.name}
+                sx={{ height: '600px', width: '100%', minWidth: '585' }}
               />
               <CardContent>
                 <Typography gutterBottom variant='h5' component='div'>

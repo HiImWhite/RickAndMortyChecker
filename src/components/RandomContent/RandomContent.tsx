@@ -71,7 +71,16 @@ const RandomContent = () => {
             onClick={handleClick}>
             Generate Character
           </Button>
-          <Card sx={{ maxWidth: 600 }}>
+          <Card
+            sx={{
+              width: '75%',
+              ['@media (min-width:600px)']: {
+                width: '50%',
+              },
+              ['@media (min-width:960px)']: {
+                width: '25%',
+              },
+            }}>
             <CardMedia
               component='img'
               image={characterData.image}

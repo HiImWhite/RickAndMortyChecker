@@ -9,6 +9,7 @@ const Footer = () => {
         bottom: 0,
         width: '100%',
         zIndex: 5,
+        backgroundColor: '#1976d2',
       }}
       component='footer'
       square
@@ -29,12 +30,13 @@ const Footer = () => {
             display: 'flex',
             mb: 2,
           }}>
-          <Typography variant='caption' color='initial'>
+          <Typography variant='caption' color='white'>
             Copyright ©2023{' '}
             <Link
               to='https://github.com/HiImWhite'
               component={NavLink}
-              underline='none'>
+              underline='none'
+              color='yellow'>
               Wojciech Bielawa
             </Link>
           </Typography>

@@ -1,49 +1,29 @@
 import { NavLink } from 'react-router-dom';
-import { Container, Link, Box, Typography, Paper } from '@mui/material';
+import { Link, Typography, Box } from '@mui/material';
 
-const Footer = () => {
-  return (
-    <Paper
-      sx={{
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-        zIndex: 5,
-        backgroundColor: '#1976d2',
-      }}
-      component='footer'
-      square
-      variant='outlined'>
-      <Container maxWidth='lg'>
-        <Box
-          sx={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            display: 'flex',
-            my: 1,
-          }}></Box>
-
-        <Box
-          sx={{
-            flexGrow: 1,
-            justifyContent: 'center',
-            display: 'flex',
-            mb: 2,
-          }}>
-          <Typography variant='caption' color='white'>
-            Copyright ©2023{' '}
-            <Link
-              to='https://github.com/HiImWhite'
-              component={NavLink}
-              underline='none'
-              color='yellow'>
-              Wojciech Bielawa
-            </Link>
-          </Typography>
-        </Box>
-      </Container>
-    </Paper>
-  );
-};
+const Footer = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      position: 'fixed',
+      width: '100%',
+      bottom: 0,
+      py: '1rem',
+      backgroundColor: '#1976d2',
+      justifyContent: 'center',
+    }}
+    component='footer'>
+    <Typography variant='caption' color='white'>
+      Copyright ©2023{' '}
+      <Link
+        to='https://github.com/HiImWhite'
+        component={NavLink}
+        underline='none'
+        color='yellow'>
+        Wojciech Bielawa
+      </Link>
+    </Typography>
+  </Box>
+);
 
 export default Footer;

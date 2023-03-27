@@ -13,7 +13,7 @@ export default interface AddCharacterModal {
   };
   setNewCharacterData: React.Dispatch<
     React.SetStateAction<{
-      id: number;
+      id: string;
       name: string;
       status: string;
       species: string;

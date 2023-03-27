@@ -1,35 +1,29 @@
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Grid,
-  Card,
-  CardMedia,
-  Typography,
-  CardContent,
-  Button,
-} from '@mui/material';
+import { Box, Grid, Button } from '@mui/material';
+import CustomCard from '../CustomCard/CustomCard';
 import { Character } from '../../interfaces/Character';
-import DeleteForeverRoundedIcon from '@mui/icons-material/DeleteForeverRounded';
-import IconButton from '@mui/material/IconButton';
-import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import MainModal from '../Modal/MainModal';
+import Loader from '../Loader/Loader';
+import { nanoid } from 'nanoid';
+
+const url = 'https://rickandmortyapi.com/api/character';
 
 const MainContent = () => {
-  const [characterData, setCharacterData] = useState<Character[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [open, setOpen] = useState<boolean>(false);
-  const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  const [newCharacterData, setNewCharacterData] = useState<Character>({
-    id: 0,
+  const defaultCharacter = {
+    id: nanoid(),
     name: '',
     status: '',
     species: '',
     gender: '',
     image: '',
-  });
-  const [editingCharacterId, setEditingCharacterId] = useState<number>(0);
-
-  const url = 'https://rickandmortyapi.com/api/character';
+  };
+  const [characterData, setCharacterData] = useState<Character[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [newCharacterData, setNewCharacterData] =
+    useState<Character>(defaultCharacter);
+  const [editingCharacterId, setEditingCharacterId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,20 +47,14 @@ const MainContent = () => {
   }, [url]);
 
   const handleOpen = () => setOpen(true);
+
   const handleClose = () => {
     setOpen(false);
-    setEditingCharacterId(0);
-    setNewCharacterData({
-      id: 0,
-      name: '',
-      status: '',
-      species: '',
-      gender: '',
-      image: '',
-    });
+    setEditingCharacterId('');
+    setNewCharacterData(defaultCharacter);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setCharacterData((prevData) => {
       const updatedData = prevData.filter((data) => data.id !== id);
       localStorage.setItem('characterData', JSON.stringify(updatedData));
@@ -74,7 +62,7 @@ const MainContent = () => {
     });
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     const character = characterData.find((c) => c.id === id);
     setNewCharacterData(character as Character);
     setEditingCharacterId(id);
@@ -84,7 +72,7 @@ const MainContent = () => {
 
   const handleSubmit = () => {
     const newCharacter = {
-      id: editingCharacterId || characterData.length + 1,
+      id: editingCharacterId || newCharacterData.id,
       name: newCharacterData.name,
       status: newCharacterData.status,
       species: newCharacterData.species,
@@ -131,19 +119,7 @@ const MainContent = () => {
     };
   };
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}>
-        Loading...
-      </Box>
-    );
-  }
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -154,12 +130,10 @@ const MainContent = () => {
         flexDirection: 'column',
       }}>
       <Button
-        sx={{ marginTop: 3 }}
+        sx={{ mt: 10 }}
         size='large'
         variant='contained'
-        onClick={() => {
-          handleOpen();
-        }}>
+        onClick={handleOpen}>
         Add character
       </Button>
       <MainModal
@@ -174,39 +148,12 @@ const MainContent = () => {
       <Grid container>
         {characterData.map((character) => (
           <Grid item xs={12} sm={6} md={4} xl={3} key={character.id} mb={5}>
-            <Card sx={{ margin: 3 }}>
-              <CardMedia
-                component='img'
-                image={character.image}
-                alt={character.name}
-                sx={{ height: '600px', width: '100%', minWidth: '585' }}
-              />
-              <CardContent>
-                <Typography gutterBottom variant='h5' component='div'>
-                  {character.name}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  Status: {character.status}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  Species: {character.species}
-                </Typography>
-                <Typography variant='body2' color='text.secondary'>
-                  Gender: {character.gender}
-                </Typography>
-                <Box
-                  display='flex'
-                  alignItems='flex-end'
-                  justifyContent='flex-end'>
-                  <IconButton onClick={() => handleDelete(character.id)}>
-                    <DeleteForeverRoundedIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleEdit(character.id)}>
-                    <EditRoundedIcon />
-                  </IconButton>
-                </Box>
-              </CardContent>
-            </Card>
+            <CustomCard
+              isList
+              character={character}
+              handleDelete={handleDelete}
+              handleEdit={handleEdit}
+            />
           </Grid>
         ))}
       </Grid>

@@ -1,25 +1,13 @@
 import { useState } from 'react';
-import {
-  Grid,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material';
+import { Box, Button } from '@mui/material';
+
 import { Character } from '../../interfaces/Character';
+import Loader from '../Loader/Loader';
+import CustomCard from '../CustomCard/CustomCard';
 
 const RandomContent = () => {
-  const [characterData, setCharacterData] = useState<Character>({
-    id: 0,
-    name: '',
-    status: '',
-    species: '',
-    gender: '',
-    image: '',
-  });
-  const [loading, setLoading] = useState<boolean>(false);
+  const [characterData, setCharacterData] = useState<Character>();
+  const [loading, setLoading] = useState(false);
 
   const randomNumber = Math.floor(Math.random() * 600);
   const randomUrl = `https://rickandmortyapi.com/api/character/${randomNumber}`;
@@ -29,9 +17,6 @@ const RandomContent = () => {
       const response = await fetch(randomUrl);
       const data = await response.json();
       setCharacterData(data);
-
-      console.log(data);
-      console.log(characterData);
     } catch (error) {
       console.log(error);
     }
@@ -42,9 +27,7 @@ const RandomContent = () => {
     fetchData();
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <Loader />;
 
   return (
     <Box
@@ -54,55 +37,14 @@ const RandomContent = () => {
         alignItems: 'center',
         flexDirection: 'column',
       }}>
-      {characterData.id === 0 ? (
-        <Button
-          sx={{ margin: 3 }}
-          size='large'
-          variant='contained'
-          onClick={handleClick}>
-          Generate Character
-        </Button>
-      ) : (
-        <>
-          <Button
-            sx={{ margin: 3 }}
-            size='large'
-            variant='contained'
-            onClick={handleClick}>
-            Generate Character
-          </Button>
-          <Card
-            sx={{
-              width: '65%',
-              ['@media (min-width:600px)']: {
-                width: '45%',
-              },
-              ['@media (min-width:960px)']: {
-                width: '25%',
-              },
-            }}>
-            <CardMedia
-              component='img'
-              image={characterData.image}
-              alt={characterData.name}
-            />
-            <CardContent>
-              <Typography gutterBottom variant='h5' component='div'>
-                {characterData.name}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                Status: {characterData.status}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                Species: {characterData.species}
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                Gender: {characterData.gender}
-              </Typography>
-            </CardContent>
-          </Card>
-        </>
-      )}
+      <Button
+        sx={{ mt: 10, mb: 2 }}
+        size='large'
+        variant='contained'
+        onClick={handleClick}>
+        Generate Character
+      </Button>
+      {characterData && <CustomCard character={characterData} />}
     </Box>
   );
 };

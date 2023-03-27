@@ -1,40 +1,15 @@
-import {
-  AppBar,
-  Button,
-  Toolbar,
-  Stack,
-  IconButton,
-  Typography,
-  Link,
-} from '@mui/material';
-import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
-import { NavLink } from 'react-router-dom';
+import { AppBar, Toolbar } from '@mui/material';
 
-const Navbar = () => {
-  return (
-    <AppBar position='static'>
-      <Toolbar>
-        <IconButton size='large' aria-label='logo'>
-          <ScienceRoundedIcon />
-        </IconButton>
-        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-          Rick and Morty APP
-        </Typography>
-        <Stack direction='row' spacing={2}>
-          <Link to='/' component={NavLink} underline='none' color='inherit'>
-            <Button color='inherit'>R&M World</Button>
-          </Link>
-          <Link
-            to='/random-character'
-            component={NavLink}
-            underline='none'
-            color='inherit'>
-            <Button color='inherit'>Random Character</Button>
-          </Link>
-        </Stack>
-      </Toolbar>
-    </AppBar>
-  );
-};
+import MenuLeft from './MenuLeft/MenuLeft';
+import MenuRight from './MenuRight/MenuRight';
+
+const Navbar = () => (
+  <AppBar position='fixed'>
+    <Toolbar>
+      <MenuLeft />
+      <MenuRight />
+    </Toolbar>
+  </AppBar>
+);
 
 export default Navbar;

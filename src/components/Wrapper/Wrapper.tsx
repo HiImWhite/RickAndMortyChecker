@@ -1,14 +1,21 @@
+import { Outlet } from 'react-router-dom';
+import { Box } from '@mui/material';
 import Footer from './Footer/Footer';
 import Navbar from './Navbar/Navbar';
-import WrapperProps from '../../interfaces/WrapperProps';
 
-const Wrapper = ({ children }: WrapperProps) => {
+const Wrapper = () => {
   return (
-    <>
+    <Box
+      sx={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       <Navbar />
-      {children}
+      <Outlet />
       <Footer />
-    </>
+    </Box>
   );
 };
 

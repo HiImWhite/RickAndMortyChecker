@@ -3,15 +3,11 @@ import { Button, Stack, Link } from '@mui/material';
 
 const MenuRight = () => (
   <Stack direction='row' spacing={2}>
-    <Link
-      to='/RickAndMortyChecker'
-      component={NavLink}
-      underline='none'
-      color='inherit'>
+    <Link to='/' component={NavLink} underline='none' color='inherit'>
       <Button color='inherit'>R&M World</Button>
     </Link>
     <Link
-      to='/RickAndMortyChecker/random-character'
+      to='/random-character'
       component={NavLink}
       underline='none'
       color='inherit'>

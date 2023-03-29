@@ -8,12 +8,9 @@ import Wrapper from './components/Wrapper/Wrapper';
 function App() {
   return (
     <Routes>
-      <Route path='/RickAndMortyChecker' element={<Wrapper />}>
-        <Route path='/RickAndMortyChecker' element={<LandingPage />} />
-        <Route
-          path='/RickAndMortyChecker/random-character'
-          element={<RandomCharacter />}
-        />
+      <Route path='/' element={<Wrapper />}>
+        <Route path='/' element={<LandingPage />} />
+        <Route path='/random-character' element={<RandomCharacter />} />
         <Route path='*' element={<NotFound />} />
       </Route>
     </Routes>

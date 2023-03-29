@@ -2,7 +2,7 @@
   "name": "rickandmortychecker",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://hiimwhite.github.io/rickandmortychecker",
+  "homepage": "https://hiimwhite.github.io/RickAndMortyChecker",
   "type": "module",
   "scripts": {
     "predeploy": "npm run build",
